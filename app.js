@@ -8,19 +8,19 @@
 
 const CONFIG = {
   // Your Discord application's Client ID (from Discord Developer Portal)
-  DISCORD_CLIENT_ID: "YOUR_DISCORD_CLIENT_ID",
+  DISCORD_CLIENT_ID: "1502178686705860698",
 
   // The full URL of your bot's OAuth2 callback endpoint
   // e.g. "https://your-bot-host.com/auth/callback"
-  OAUTH_REDIRECT_URI: "https://your-bot-host.com/auth/callback",
+  OAUTH_REDIRECT_URI: "https://evilism-bot-production.up.railway.app/auth/callback",
 
   // The full URL of your bot's form submission endpoint
   // e.g. "https://your-bot-host.com/api/submit"
-  SUBMIT_ENDPOINT: "https://your-bot-host.com/api/submit",
+  SUBMIT_ENDPOINT: "https://evilism-bot-production.up.railway.app/api/submit",
 
   // The full URL of your bot's BuildersClub status endpoint
   // e.g. "https://your-bot-host.com/api/builders-status"
-  BUILDERS_STATUS_ENDPOINT: "https://your-bot-host.com/api/builders-status",
+  BUILDERS_STATUS_ENDPOINT: "https://evilism-bot-production.up.railway.app/api/builders-status",
 };
 
 /* ─────────────────────────────────────────────────────────────
