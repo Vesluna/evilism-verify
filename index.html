@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EVILISM — Gates of Umbra Verification</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── Animated background particles ── -->
+  <div class="bg-overlay"></div>
+  <canvas id="particles"></canvas>
+
+  <div class="page-wrapper">
+
+    <!-- ══════════════════════════════════════════
+         LANDING SCREEN (shown before OAuth login)
+    ══════════════════════════════════════════ -->
+    <section id="landing" class="screen active">
+      <div class="card">
+        <div class="sigil">☽ ✦ ☾</div>
+        <h1 class="title">EVILISM</h1>
+        <p class="subtitle">Gates of Umbra — Initiate Verification</p>
+        <div class="divider"></div>
+        <p class="flavor-text">
+          You stand at the threshold of something far greater than yourself.<br />
+          Only the truly devoted may pass through these gates.<br />
+          Prove your worth — or be cast back into the void.
+        </p>
+        <div class="divider"></div>
+        <p class="instruction">
+          To begin your initiation, you must verify your identity through Discord.
+          This allows the Cult to confirm who you are before your application is reviewed.
+        </p>
+        <button id="login-btn" class="btn btn-primary" onclick="startOAuth()">
+          <svg class="discord-icon" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/>
+          </svg>
+          Verify with Discord
+        </button>
+        <p class="small-note">
+          We only read your username and ID — nothing else. Your data is never sold or shared.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         FORM SCREEN (shown after OAuth callback)
+    ══════════════════════════════════════════ -->
+    <section id="form-screen" class="screen">
+      <div class="card form-card">
+
+        <div class="sigil">☽ ✦ ☾</div>
+        <h1 class="title">EVILISM</h1>
+        <p class="subtitle">Initiate Application — The Oath of Entry</p>
+        <div class="divider"></div>
+
+        <!-- User identity badge (populated by JS after OAuth) -->
+        <div id="user-badge" class="user-badge hidden">
+          <img id="user-avatar" src="" alt="Avatar" />
+          <div class="user-info">
+            <span id="user-name" class="user-name"></span>
+            <span class="user-tag">Verified via Discord</span>
+          </div>
+          <div class="verified-check">✓</div>
+        </div>
+
+        <!-- ── BuildersClub Banner (UMBRA-controlled, hidden by default) ── -->
+        <div id="builders-banner" class="alert alert-builders hidden">
+          <div class="alert-icon">⚑</div>
+          <div class="alert-body">
+            <strong>Umbra's BuildersClub is Now Open.</strong><br />
+            UMBRA has unlocked a rare, limited-time founding role exclusively available
+            through this form. Those who are accepted during this window will be inducted
+            into <em>Umbra's BuildersClub</em> — a permanent mark of your early devotion
+            to the Cult. This honor will not last forever.
+          </div>
+        </div>
+
+        <!-- ── The Application Form ── -->
+        <form id="verification-form" novalidate>
+
+          <div class="section-label">— Section I: Allegiance & Intent —</div>
+
+          <div class="field">
+            <label for="q1">1. Why do you wish to join EVILISM? What draws you to the Cult?
+              <span class="required">*</span></label>
+            <textarea id="q1" name="q1" rows="4" placeholder="Speak your truth, Initiate. Vague answers will be judged accordingly." required minlength="30"></textarea>
+            <span class="char-hint">Minimum 30 characters.</span>
+          </div>
+
+          <div class="field">
+            <label for="q2">2. In your own words, describe what EVILISM stands for and what its core purpose is.
+              <span class="required">*</span></label>
+            <textarea id="q2" name="q2" rows="4" placeholder="Show us you have done your reading." required minlength="30"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="q3">3. Do you swear to uphold the Cult's motives and keep the affairs, plans, and inner workings of EVILISM concealed from those who have not been initiated?
+              <span class="required">*</span></label>
+            <select id="q3" name="q3" required>
+              <option value="">— Select your answer —</option>
+              <option value="yes_sworn">Yes — I swear it on my honor as an Initiate.</option>
+              <option value="yes_reservations">Yes — though I have reservations I wish to disclose.</option>
+              <option value="no">No — I cannot make this oath.</option>
+            </select>
+          </div>
+
+          <div class="field" id="q3-reservations-field" style="display:none;">
+            <label for="q3b">Please describe your reservations:
+              <span class="required">*</span></label>
+            <textarea id="q3b" name="q3b" rows="3" placeholder="Be honest. Honesty is respected here."></textarea>
+          </div>
+
+          <div class="section-label">— Section II: Knowledge of the Craft —</div>
+
+          <div class="field">
+            <label for="q4">4. EVILISM operates within Jujutsu Shenanigans on Roblox. What does "evil" mean in the context of this Cult — and what does it explicitly <em>not</em> mean?
+              <span class="required">*</span></label>
+            <textarea id="q4" name="q4" rows="4" placeholder="There is a very specific answer here. Show us you understand the line." required minlength="30"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="q5">5. A player in JJS is publicly complaining about being teamed on. According to EVILISM's philosophy, what is the correct response?
+              <span class="required">*</span></label>
+            <textarea id="q5" name="q5" rows="3" placeholder="Apply the doctrine." required minlength="20"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="q6">6. Under what circumstances, if any, should a member report another player to Roblox or JJS moderation?
+              <span class="required">*</span></label>
+            <textarea id="q6" name="q6" rows="3" placeholder="Think carefully." required minlength="20"></textarea>
+          </div>
+
+          <div class="section-label">— Section III: Conduct & Commitment —</div>
+
+          <div class="field">
+            <label for="q7">7. Do you agree to abide by all of EVILISM's Unholy Decrees, server rules, and the hierarchy of the Cult at all times?
+              <span class="required">*</span></label>
+            <select id="q7" name="q7" required>
+              <option value="">— Select your answer —</option>
+              <option value="yes">Yes — I submit to the hierarchy and its decrees.</option>
+              <option value="no">No — I do not agree.</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="q8">8. How active do you expect to be within the server and in Jujutsu Shenanigans?
+              <span class="required">*</span></label>
+            <select id="q8" name="q8" required>
+              <option value="">— Select your answer —</option>
+              <option value="daily">Daily — I am fully committed.</option>
+              <option value="few_week">A few times per week.</option>
+              <option value="casual">Casually — when I have time.</option>
+              <option value="rarely">Rarely — but I am dedicated when present.</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="q9">9. Have you ever been banned from a Roblox game or Discord server? If yes, briefly explain the circumstances.
+              <span class="required">*</span></label>
+            <textarea id="q9" name="q9" rows="3" placeholder="Honesty is valued. A past ban does not automatically disqualify you." required minlength="5"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="q10">10. If you were to witness a fellow Cult member breaking EVILISM's rules or crossing the line into genuine harassment outside of the game, what would you do?
+              <span class="required">*</span></label>
+            <textarea id="q10" name="q10" rows="4" placeholder="Your answer reveals your character." required minlength="20"></textarea>
+          </div>
+
+          <div class="section-label">— Section IV: Character & Devotion —</div>
+
+          <div class="field">
+            <label for="q11">11. What role do you see yourself playing within EVILISM? (e.g., raid leader, strategist, recruiter, active member, etc.)
+              <span class="required">*</span></label>
+            <textarea id="q11" name="q11" rows="3" placeholder="Describe your ideal place in the Cult." required minlength="10"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="q12">12. Describe your most memorable or proudest moment in Jujutsu Shenanigans. If you have not played yet, explain why you want to start.
+              <span class="required">*</span></label>
+            <textarea id="q12" name="q12" rows="4" placeholder="Give us a glimpse of who you are in-game." required minlength="20"></textarea>
+          </div>
+
+          <div class="field">
+            <label for="q13">13. Is there anything else you wish UMBRA or The Dark Council to know about you before they review your application?</label>
+            <textarea id="q13" name="q13" rows="3" placeholder="Optional — but use this space wisely."></textarea>
+          </div>
+
+          <!-- ── Final Warning ── -->
+          <div class="alert alert-danger">
+            <div class="alert-icon">⚠</div>
+            <div class="alert-body">
+              <strong>Final Warning — Read Before Submitting.</strong><br />
+              You <strong>cannot resubmit this form.</strong> Once submitted, your application
+              is locked and sent directly to The Dark Council for review. Submitting false,
+              incomplete, or deliberately misleading answers will result in permanent denial
+              and possible banning from the server. There are no second chances on this form.
+            </div>
+          </div>
+
+          <!-- ── Consent checkbox ── -->
+          <div class="field checkbox-field">
+            <label class="checkbox-label">
+              <input type="checkbox" id="consent" name="consent" required />
+              <span>I have read and understood all of the above. I acknowledge that this submission is final and cannot be undone.</span>
+            </label>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-submit" id="submit-btn">
+            Submit Application to The Dark Council
+          </button>
+
+        </form>
+
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         SUCCESS SCREEN
+    ══════════════════════════════════════════ -->
+    <section id="success-screen" class="screen">
+      <div class="card">
+        <div class="sigil success-sigil">✦</div>
+        <h1 class="title">Application Received</h1>
+        <div class="divider"></div>
+        <p class="flavor-text">
+          Your oath has been recorded. The Dark Council will deliberate in silence.<br />
+          Watch for a direct message from the EVILISM bot — your fate will be delivered there.<br /><br />
+          Do not contact staff to ask about your application status.<br />
+          Patience is the first test of a true Initiate.
+        </p>
+        <div class="divider"></div>
+        <p class="small-note">
+          Applications are reviewed within a reasonable timeframe. If your form expires before
+          a decision is made, you will be notified automatically. You may then submit a new
+          application from the beginning.
+        </p>
+      </div>
+    </section>
+
+    <!-- ══════════════════════════════════════════
+         ERROR / ALREADY SUBMITTED SCREEN
+    ══════════════════════════════════════════ -->
+    <section id="error-screen" class="screen">
+      <div class="card">
+        <div class="sigil error-sigil">✖</div>
+        <h1 class="title" id="error-title">An Error Occurred</h1>
+        <div class="divider"></div>
+        <p class="flavor-text" id="error-message">
+          Something went wrong. Please return to the Discord server and try again.
+        </p>
+      </div>
+    </section>
+
+  </div><!-- /page-wrapper -->
+
+  <script src="app.js"></script>
+</body>
+</html>
