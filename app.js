@@ -77,6 +77,26 @@ window.addEventListener("DOMContentLoaded", async () => {
   const token   = params.get("token");
   const already = params.get("already_submitted");
   const expired = params.get("expired");
+  const banned  = params.get("banned");
+  const locked  = params.get("locked");
+  const not_in_server = params.get("not_in_server");
+  const error_msg = params.get("error_msg");
+
+  if (banned === "1") {
+    showError("ACCESS DENIED", "You cannot submit this form since you were banned from the server by our TDC team, or umbra.");
+    return;
+  }
+
+  if (locked === "1") {
+    const reason = params.get("reason") || "Users cannot submit join requests at this time.";
+    showError("FORMS LOCKED", `Reason: ${reason}`);
+    return;
+  }
+
+  if (not_in_server === "1") {
+    showError("ACCESS DENIED", "YOU ARE NOT ALLOWED TO SUBMIT THIS FORM UNLESS YOU ARE INSIDE THE SERVER.");
+    return;
+  }
 
   if (already === "1") {
     showError(
@@ -93,6 +113,11 @@ window.addEventListener("DOMContentLoaded", async () => {
       "Session Expired",
       "Your verification session has expired. Please return to the Discord server and request a new verification link."
     );
+    return;
+  }
+
+  if (error_msg) {
+    showError("Verification Error", decodeURIComponent(error_msg));
     return;
   }
 
